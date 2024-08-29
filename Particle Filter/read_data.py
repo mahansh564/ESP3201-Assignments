@@ -28,4 +28,4 @@ def read_pos(filename):
 
     return pos
 
-actual_robot_pos = read_pos("./pos.dat")
+#actual_robot_pos = read_pos("data/pos.dat")

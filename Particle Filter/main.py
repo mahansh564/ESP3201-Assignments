@@ -94,13 +94,13 @@ def update_sensor_readings(actual_robot_pos, landmarks):
 def main():
     # Implementation of a particle filter for robot pose estimation
     print("Reading landmark positions")
-    landmarks = read_world("./world.dat")
+    landmarks = read_world('data/world.dat')
 
     # Initialize the particles
     map_limits = [0, 10, 0, 10]
     particles = initialize_particles(1000, map_limits)
 
-    actual_robot_pos = read_pos("./pos.dat")
+    actual_robot_pos = read_pos("data/pos.dat")
 
     # To store the localization error and computational time for each iteration
     localization_errors = []
