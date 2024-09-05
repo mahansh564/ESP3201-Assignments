@@ -161,6 +161,8 @@ def main():
 
         plt.pause(0.01)  # Pause for a short period to update the subplots
     
+    print('Mean Localization Error: %.3f' % np.mean(localization_errors))
+    print('Mean Computation Time: %.3f' % np.mean(computational_times))
     plt.show()
     plt.pause(10)
 
