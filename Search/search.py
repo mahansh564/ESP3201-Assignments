@@ -24,6 +24,7 @@ def search(maze, searchMethod):
         "dfs": dfs,
         "ucs": ucs,
         "astar": astar,
+        "astar_corner": astar_corner,
         "astar_multi": astar_multi,
     }.get(searchMethod)(maze)
 
@@ -53,6 +54,7 @@ def bfs(maze):
     """
     # TODO: Write your code here        
     return []
+
 
 def dfs(maze):
     """
@@ -89,7 +91,8 @@ def astar(maze):
     # TODO: Write your code here
     return []
 
-def astar_multi(maze):
+
+def astar_corner(maze):
     """
     Runs A star for part 2 of the assignment.
 
@@ -100,3 +103,15 @@ def astar_multi(maze):
     # TODO: Write your code here
     return []
 
+
+def astar_multi(maze):
+    """
+    Runs A star for part 3 of the assignment in the case where there are
+    multiple objectives.
+
+    @param maze: The maze to execute the search on.
+
+    @return path: a list of tuples containing the coordinates of each state in the computed path
+    """
+    # TODO: Write your code here
+    return []

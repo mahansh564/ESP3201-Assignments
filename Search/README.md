@@ -12,7 +12,7 @@ pygame
 The main file to run the mp is mp1.py:
 
 ```
-usage: mp1.py [-h] [--method {bfs,dfs,ucs,astar, astar_corner}] [--scale SCALE]
+usage: mp1.py [-h] [--method {bfs,dfs,dijkstra,astar, astar_corner}] [--scale SCALE]
               [--fps FPS] [--save SAVE]
               filename
 ```
