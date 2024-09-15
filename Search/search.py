@@ -52,7 +52,22 @@ def bfs(maze):
 
     @return path: a list of tuples containing the coordinates of each state in the computed path
     """
-    # TODO: Write your code here        
+    start = maze.getStart()
+    objective = maze.getObjectives()
+    queue = [[start]]
+    visited = set()
+    while queue:
+        path = queue.pop(0)
+        node = path[-1]
+        if node not in visited:
+            neighbours = maze.getNeighbors(node[0], node[1])
+            for neighbour in neighbours:
+                new_path = list(path)
+                new_path.append(neighbour)
+                queue.append(new_path)
+                if neighbour in objective:
+                    return new_path
+            visited.add(node)
     return []
 
 
@@ -64,7 +79,22 @@ def dfs(maze):
 
     @return path: a list of tuples containing the coordinates of each state in the computed path
     """
-    # TODO: Write your code here
+    start = maze.getStart()
+    objective = maze.getObjectives()
+    queue = [[start]]
+    visited = set()
+    while queue:
+        path = queue.pop()
+        node = path[-1]
+        if node not in visited:
+            if node in objective:
+                return path
+            neighbours = maze.getNeighbors(node[0], node[1])
+            for neighbour in neighbours:
+                new_path = list(path)
+                new_path.append(neighbour)
+                queue.append(new_path)
+            visited.add(node)
     return []
 
 

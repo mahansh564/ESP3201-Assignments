@@ -67,7 +67,7 @@ class Neuron:
 class NeuralNetwork:
     def __init__(self, num_inputs, num_hidden, num_outputs) -> None:
         self.hidden_layer = [Neuron(num_inputs) for _ in range(num_hidden)]
-        self.output_layer = [Neuron(num_hidden, activation=linear) for _ in range(num_outputs)]
+        self.output_layer = [Neuron(num_hidden, activation=sigmoid) for _ in range(num_outputs)]
 
     def forward(self, inputs) -> list[float]:
         hidden_outputs = [neuron.forward(inputs) for neuron in self.hidden_layer]
