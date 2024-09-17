@@ -52,22 +52,21 @@ def bfs(maze):
 
     @return path: a list of tuples containing the coordinates of each state in the computed path
     """
-    start = maze.getStart()
-    objective = maze.getObjectives()
-    queue = [[start]]
-    visited = set()
+    start, objectives = maze.getStart(), maze.getObjectives()
+    # BFS has a queue data structure i.e. FIFO order
+    queue, explored = [[start]], set()
+    
     while queue:
         path = queue.pop(0)
         node = path[-1]
-        if node not in visited:
-            neighbours = maze.getNeighbors(node[0], node[1])
-            for neighbour in neighbours:
-                new_path = list(path)
-                new_path.append(neighbour)
-                queue.append(new_path)
-                if neighbour in objective:
-                    return new_path
-            visited.add(node)
+        if node in explored:
+            continue
+        if node in objectives:
+            return path
+        explored.add(node)
+        for neighbor in maze.getNeighbors(*node):
+            queue.append(path + [neighbor])
+    
     return []
 
 
@@ -79,22 +78,21 @@ def dfs(maze):
 
     @return path: a list of tuples containing the coordinates of each state in the computed path
     """
-    start = maze.getStart()
-    objective = maze.getObjectives()
-    queue = [[start]]
-    visited = set()
-    while queue:
-        path = queue.pop()
+    start, objectives = maze.getStart(), maze.getObjectives()
+    # DFS has a stack data structure i.e. LIFO order
+    stack, explored = [[start]], set()
+    
+    while stack:
+        path = stack.pop()
         node = path[-1]
-        if node not in visited:
-            if node in objective:
-                return path
-            neighbours = maze.getNeighbors(node[0], node[1])
-            for neighbour in neighbours:
-                new_path = list(path)
-                new_path.append(neighbour)
-                queue.append(new_path)
-            visited.add(node)
+        if node in explored:
+            continue
+        if node in objectives:
+            return path
+        explored.add(node)
+        for neighbor in maze.getNeighbors(*node):
+            stack.append(path + [neighbor])
+    
     return []
 
 
@@ -106,9 +104,51 @@ def ucs(maze):
 
     @return path: a list of tuples containing the coordinates of each state in the computed path
     """
-    # TODO: Write your code here
+    start, objectives = maze.getStart(), maze.getObjectives()
+    # UCS has a priority-queue data structure i.e. FIFO order ordered by path-cost
+    frontier, explored = [(0, [start])], set()
+    
+    while frontier:
+        cost, path = frontier.pop(0)
+        node = path[-1]
+        if node in explored:
+            continue
+        if node in objectives:
+            return path
+        explored.add(node)
+        for neighbor in maze.getNeighbors(*node):
+            frontier.append((cost + 1, path + [neighbor]))
+    
     return []
 
+def astar_search(maze, start, objective):
+    frontier = [Node(None, start)]
+    explored = set()
+
+    while frontier:
+        current_node = min(frontier, key=lambda node: node.f)
+        frontier.remove(current_node)
+
+        if current_node.position == objective:
+            path = []
+            while current_node:
+                path.append(current_node.position)
+                current_node = current_node.parent
+            return path[::-1]
+
+        explored.add(current_node.position)
+
+        for neighbor in maze.getNeighbors(*current_node.position):
+            if neighbor in explored:
+                continue
+
+            neighbor_node = Node(current_node, neighbor)
+            neighbor_node.g = current_node.g + 1
+            neighbor_node.h = abs(neighbor[0] - objective[0]) + abs(neighbor[1] - objective[1])
+            neighbor_node.f = neighbor_node.g + neighbor_node.h
+            frontier.append(neighbor_node)
+
+    return []
 
 def astar(maze):
     """
@@ -118,8 +158,7 @@ def astar(maze):
 
     @return path: a list of tuples containing the coordinates of each state in the computed path
     """
-    # TODO: Write your code here
-    return []
+    return astar_search(maze, maze.getStart(), maze.getObjectives()[0])
 
 
 def astar_corner(maze):
@@ -130,9 +169,25 @@ def astar_corner(maze):
 
     @return path: a list of tuples containing the coordinates of each state in the computed path
     """
-    # TODO: Write your code here
-    return []
+    start, objectives = maze.getStart(), maze.getObjectives()
+    full_path = []
 
+    # Find the closest objective using manhattan distance. Find path to that objective, then find the next closest objective and repeat.
+    while objectives:
+        closest_objective = min(objectives, key=lambda obj: abs(start[0] - obj[0]) + abs(start[1] - obj[1]))
+        path = astar_search(maze, start, closest_objective)
+        
+        if not path:
+            return []  # No valid path found
+        
+        if full_path:
+            path = path[1:]
+        full_path.extend(path)
+        
+        start = closest_objective
+        objectives.remove(closest_objective)
+    
+    return full_path
 
 def astar_multi(maze):
     """
@@ -143,5 +198,22 @@ def astar_multi(maze):
 
     @return path: a list of tuples containing the coordinates of each state in the computed path
     """
-    # TODO: Write your code here
-    return []
+    start, objectives = maze.getStart(), maze.getObjectives()
+    full_path = []
+    
+    # Find the closest objective using manhattan distance. Find path to that objective, then find the next closest objective and repeat.
+    while objectives:
+        closest_objective = min(objectives, key=lambda obj: abs(start[0] - obj[0]) + abs(start[1] - obj[1]))
+        path = astar_search(maze, start, closest_objective)
+        
+        if not path:
+            return []  # No valid path found
+        
+        if full_path:
+            path = path[1:]
+        full_path.extend(path)
+        
+        start = closest_objective
+        objectives.remove(closest_objective)
+    
+    return full_path

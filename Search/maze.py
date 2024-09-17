@@ -53,7 +53,7 @@ class Maze:
     def isWall(self, row, col):
         return self.mazeRaw[row][col] == self.__wallChar
 
-    # Rturns True if the given position is the location of an objective
+    # Returns True if the given position is the location of an objective
     def isObjective(self, row, col):
         return (row, col) in self.__objective
 
